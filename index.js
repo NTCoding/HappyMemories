@@ -22,8 +22,18 @@ server.route({
 
 server.route({
 	method: 'POST',
-	path: '/search-slack/{date}',
+	path: '/search-slack',
 	handler: function(request, reply) {
-        reply({ message: 'TODO' });
+        const searchText = request.payload.text;
+        const slackMessage = {
+            response_type: 'in_channel',
+            text: 'You are searching for happy memories on: ' + searchText,
+            attachments: [
+                {
+                    text: 'Unfortunately, this plugin does not work yet. It will soon, though'
+                }
+            ]
+        };
+        reply(slackMessage);
 	}
 });
