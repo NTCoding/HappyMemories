@@ -54,7 +54,8 @@ function success(query, match) {
         text: 'Here is a happy memory for ' + query,
         attachments: [{
             text: match.text,
-            author_name: "@" + match.username
+            author_name: "@" + match.username,
+            title_link: match.permalink
         }]
     };
 }
