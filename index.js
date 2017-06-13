@@ -1,8 +1,13 @@
 const Hapi = require('hapi');
 const config = require('config');
+const http = require('request-promise');
+//require('request-debug')(http);
 
 const server = new Hapi.Server();
-server.connection({ port: process.env.PORT || config.app.port, host: config.app.host });
+server.connection({
+    port: process.env.PORT || config.app.port,
+    host: config.app.host
+});
 
 server.start((err) => {
 
@@ -15,25 +20,47 @@ server.start((err) => {
 server.route({
     method: 'GET',
     path: '/',
-    handler: function (request, reply) {
+    handler: function(request, reply) {
         reply('Happy memories for you!!!');
     }
 });
 
+const slackToken = process.env.SLACK_TOKEN;
+
+function slackMessageSearchUrl(query) {
+    return "https://slack.com/api/search.messages" + "?query=" + query + "&count=200" + "&token=" + slackToken;
+}
+
 server.route({
-	method: 'POST',
-	path: '/search-slack',
-	handler: function(request, reply) {
-        const searchText = request.payload.text;
-        const slackMessage = {
-            response_type: 'in_channel',
-            text: 'You are searching for happy memories on: ' + searchText,
-            attachments: [
-                {
-                    text: 'Unfortunately, this plugin does not work yet. It will soon, though'
-                }
-            ]
-        };
-        reply(slackMessage);
-	}
+    method: 'POST',
+    path: '/search-slack',
+    handler: function(request, reply) {
+        const query = request.payload.text;
+        const p = http({ uri: slackMessageSearchUrl(query), json: true })
+            .then(json => {
+                if (json.messages.matches) {
+                    const memories = json.messages.matches.filter(x => x.type === "message");
+                    if (memories) return success(query, memories[0]);
+                } 
+                return failure(query);
+            });
+        reply(p);
+    }
 });
+
+function success(query, match) {
+    return {
+        response_type: 'in_channel',
+        text: 'Here is a happy memory for ' + query,
+        attachments: [{
+            text: match.text,
+            author_name: "@" + match.username
+        }]
+    };
+}
+
+function failure(query) {
+    return {
+        text: 'There are no happy memories of ' + query
+    };
+}   

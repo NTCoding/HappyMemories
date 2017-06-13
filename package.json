@@ -4,7 +4,7 @@
   "description": "Find happy memories in Slack",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +19,11 @@
   "homepage": "https://github.com/NTCoding/HappyMemories#readme",
   "dependencies": {
     "config": "^1.26.1",
-    "hapi": "^16.4.3"
+    "hapi": "^16.4.3",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
