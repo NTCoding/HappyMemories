@@ -2,7 +2,7 @@ const Hapi = require('hapi');
 const config = require('config');
 
 const server = new Hapi.Server();
-server.connection({ port: config.app.port, host: config.app.host });
+server.connection({ port: process.env.PORT || config.app.port, host: config.app.host });
 
 server.start((err) => {
 
