@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/NTCoding/HappyMemories#readme",
   "dependencies": {
+    "config": "^1.26.1",
     "hapi": "^16.4.3"
   }
 }
