@@ -36,12 +36,15 @@ server.route({
     path: '/search-slack',
     handler: function(request, reply) {
         const query = request.payload.text;
-        const p = http({ uri: slackMessageSearchUrl(query), json: true })
+        const p = http({
+                uri: slackMessageSearchUrl(query),
+                json: true
+            })
             .then(json => {
                 if (json.messages.matches) {
                     const memories = json.messages.matches.filter(x => x.type === "message");
                     if (memories) return success(query, memories[0]);
-                } 
+                }
                 return failure(query);
             });
         reply(p);
@@ -52,11 +55,17 @@ function success(query, match) {
     return {
         response_type: 'in_channel',
         text: 'Here is a happy memory for ' + query,
+        title: match.username + "'s happy " + query + " memory",
+        title_link: match.previous.permalink,
         attachments: [{
+            text: match.previous.text,
+            author_name: "@" + match.previous.username,
+        }, {
             text: match.text,
             author_name: "@" + match.username,
-            title: match.username + "'s happy " + query + " memory",
-            title_link: match.permalink
+        }, {
+            text: match.next.text,
+            author_name: "@" + match.next.username,
         }]
     };
 }
@@ -65,4 +74,4 @@ function failure(query) {
     return {
         text: 'There are no happy memories of ' + query
     };
-}   
+}
