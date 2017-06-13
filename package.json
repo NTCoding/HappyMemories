@@ -1,0 +1,23 @@
+{
+  "name": "happymemories",
+  "version": "1.0.0",
+  "description": "Find happy memories in Slack",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NTCoding/HappyMemories.git"
+  },
+  "author": "Nick",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NTCoding/HappyMemories/issues"
+  },
+  "homepage": "https://github.com/NTCoding/HappyMemories#readme",
+  "dependencies": {
+    "hapi": "^16.4.3"
+  }
+}

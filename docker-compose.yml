@@ -1,0 +1,12 @@
+version: '3'
+services:
+    app:
+        image: mc2labs/nodejs:dev-alpine
+        ports:
+            - "9001:9001"
+        volumes:
+            - ".:/app"
+        environment:
+            HOST: "0.0.0.0"
+            PORT: "9001"
+
