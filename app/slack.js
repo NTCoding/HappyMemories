@@ -10,9 +10,9 @@ exports.searchForHappyMemory = (query) => {
         .then(json => {
         	if (json.messages.matches) {
                 const memories = json.messages.matches.filter(x => x.type === "message");
-                if (memories) return success(query, memories[0]);
+                if (memories) return successResponse(query, memories[0]);
             }
-            return failure(query);
+            return failureResponse(query);
         });
 }
 

@@ -8,11 +8,6 @@ server.connection({
     host: config.app.host
 });
 
-server.start((err) => {
-    if (err) throw err;
-    console.log(`Server running at: ${server.info.uri}`);
-});
-
 server.route({
     method: 'GET',
     path: '/',
@@ -28,3 +23,27 @@ server.route({
         reply(slack.searchForHappyMemory(request.payload.text));
     }
 });
+
+server.register([{
+    register: require('good'),
+    options: {
+        reporters: {
+            console: [{
+                module: 'good-squeeze',
+                name: 'Squeeze',
+                args: [{
+                    log: '*',
+                    response: '*',
+                    error: '*'
+                }]
+            }, {
+                module: 'good-console'
+            }, 'stdout']
+        }
+    }
+}], (err) => {
+    server.start((err) => {
+        if (err) throw err;
+        console.log(`Server running at: ${server.info.uri}`);
+    });
+}); 
