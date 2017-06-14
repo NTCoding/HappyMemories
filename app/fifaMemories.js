@@ -1,5 +1,5 @@
 exports.new = (players, rating) => {
-    const teams = teamsForRating(rating);
+    const teams = teamsForRating(rating.toString());
     return {
         teams: players.map(p => {
             return {
@@ -12,11 +12,11 @@ exports.new = (players, rating) => {
 
 function teamsForRating(r) {
     if (!r) return fiveStarTeams;
-    if (r === 4.5) return fourPointFiveStarTeams;
-    if (r === 4) return fourStarTeams;
-    if (r.toString() === "4-5") return fourStarTeams.concat(fourPointFiveStarTeams).concat(fiveStarTeams);
+    if (r === "4.5") return fourPointFiveStarTeams;
+    if (r === "4") return fourStarTeams;
+    if (r === "4-5") return fourStarTeams.concat(fourPointFiveStarTeams).concat(fiveStarTeams);
 
-    throw 'Unknown rating';
+    throw new Error('Unknown rating: ' + r);
 }
 
 function selectRandom(arr) {

@@ -62,11 +62,13 @@ server.route({
     config: {
         auth: 'slack1',
         handler: (request, reply) => {
-            const names = request.payload.text.split(',');
-            const mem = FifaMemories.new(names);
+            const commandParams = request.payload.text.split(' ');
+            const names = commandParams[0].split(",");
+            const starRating = commandParams[1];
+            const mem = FifaMemories.new(names, starRating);
             const res = {
                 response_type: 'in_channel',
-                text: 'Time to create a new fifa memory with ' + names.join(" & "),
+                text: buildMessage(names, starRating),
                 attachments: mem.teams.map(t => {
                     return {
                         text: t.name,
@@ -78,6 +80,12 @@ server.route({
         }
     }
 });
+
+function buildMessage(names, starRating) {
+    const base = 'Time to create a new fifa memory with ' + names.join(" & ");
+    if (!starRating) return base;
+    else return base + " with teams at rating: " + starRating;
+}
 
 server.register([{
     register: require('good'),
