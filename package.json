@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app/index.js",
     "dev": "nodemon app/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,8 @@
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "mocha": "^3.4.2",
+    "nodemon": "^1.11.0",
+    "should": "^11.2.1"
   }
 }
