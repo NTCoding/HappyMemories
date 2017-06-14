@@ -2,6 +2,7 @@ const Hapi = require('hapi');
 const config = require('config');
 const Slack = require('./slack');
 const Boom = require('boom');
+const FifaMemories = require('./fifaMemories');
 
 const server = new Hapi.Server();
 server.connection({
@@ -51,6 +52,29 @@ server.route({
         auth: 'slack1',
         handler: function(request, reply) {
             reply(Slack.searchForHappyMemory(request.payload.text));
+        }
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/slack-new-fifa-memory',
+    config: {
+        auth: 'slack1',
+        handler: (request, reply) => {
+            const names = request.payload.text.split(',');
+            const mem = FifaMemories.new(names);
+            const res = {
+                response_type: 'in_channel',
+                text: 'Time to create a new fifa memory with ' + names.join(" & "),
+                attachments: mem.teams.map(t => {
+                    return {
+                        text: t.name,
+                        author_name: t.player
+                    }
+                })
+            };
+            reply(res);
         }
     }
 });
