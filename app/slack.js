@@ -1,6 +1,9 @@
 const http = require('request-promise');
 require('request-debug')(http);
-const slackToken = process.env.SLACK_TOKEN;
+
+const oauthToken = process.env.SLACK_TOKEN;
+
+exports.verificationToken = process.env.SLACK_VERIFICATION_TOKEN;
 
 exports.searchForHappyMemory = (query) => {
     return http({
@@ -17,7 +20,7 @@ exports.searchForHappyMemory = (query) => {
 }
 
 function slackMessageSearchUrl(query) {
-    return "https://slack.com/api/search.messages" + "?query=" + query + "&count=200" + "&token=" + slackToken;
+    return "https://slack.com/api/search.messages" + "?query=" + query + "&count=200" + "&token=" + oauthToken;
 }
 
 function successResponse(query, match) {
