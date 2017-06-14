@@ -1,5 +1,5 @@
 const http = require('request-promise');
-require('request-debug')(http);
+//require('request-debug')(http);
 
 const oauthToken = process.env.SLACK_TOKEN;
 
