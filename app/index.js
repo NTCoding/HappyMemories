@@ -62,36 +62,38 @@ server.route({
     config: {
         auth: 'slack1',
         handler: (request, reply) => {
-            if (request.payload.text === 'help') return reply(fifaHelpResponse);
-            const commandParams = request.payload.text.split(' ');
-            const names = commandParams[0].split(",");
-            const starRating = commandParams[1];
-            const mem = FifaMemories.new(names, starRating);
-            const res = {
-                response_type: 'in_channel',
-                text: buildMessage(names, starRating),
-                attachments: mem.teams.map(t => {
-                    return {
-                        text: t.name,
-                        author_name: t.player
-                    }
-                })
-            };
-            reply(res);
+            try {
+                if (request.payload.text === 'help') return reply(fifaHelpResponse);
+                const commandParams = request.payload.text.split(' ');
+                const names = commandParams[0].split(",");
+                const starRating = commandParams[1];
+                const mem = FifaMemories.new(names, starRating);
+                const res = {
+                    response_type: 'in_channel',
+                    text: buildMessage(names, starRating),
+                    attachments: mem.teams.map(t => {
+                        return {
+                            text: t.name,
+                            author_name: t.player
+                        }
+                    })
+                };
+                reply(res);
+            } catch(err) {
+                reply({ text: 'Sorry, you did something wrong. Command help: \n' + fifaHelpResponse});
+            }
         }
     }
 });
 
-const fifaHelpResponse = {
-    text: `
-    Arguments: [players (comma-separated)] [rating (optional)]
+const fifaHelpResponse = 
+    `Arguments: [players (comma-separated)] [rating (optional)]
     Ratings: 4, 4.5, 5, 4-5, 4.5-5
     Examples:
         - Ben,Marc 4
         - Ed,Trev 4-5
         - Dan,Jenna 4.5-5
     `
-};
 
 function buildMessage(names, starRating) {
     const base = 'Time to create a new fifa memory with ' + names.join(" & ");
