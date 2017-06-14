@@ -1,5 +1,5 @@
 exports.new = (players, rating) => {
-    const teams = teamsForRating(rating.toString());
+    const teams = teamsForRating((rating || "").toString());
     return {
         teams: players.map(p => {
             return {
@@ -15,6 +15,7 @@ function teamsForRating(r) {
     if (r === "4.5") return fourPointFiveStarTeams;
     if (r === "4") return fourStarTeams;
     if (r === "4-5") return fourStarTeams.concat(fourPointFiveStarTeams).concat(fiveStarTeams);
+    if (r === "4.5-5") return fourPointFiveStarTeams.concat(fiveStarTeams);
 
     throw new Error('Unknown rating: ' + r);
 }

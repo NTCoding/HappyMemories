@@ -45,9 +45,18 @@ describe('choosing a star rating', () => {
     it('Chooses a range of 4, 4.5, and 5 when "4-5" rating is chosen', () => {
         const allTeams = fourStarTeams.concat(fourPointFiveStarTeams).concat(fiveStarTeams);
         for (var i = 0; i < 100; i++) {
-            const result = FifaMemories.new(['a', 'b'], 4);
+            const result = FifaMemories.new(['a', 'b'], '4-5');
             allTeams.should.containEql(result.teams[0].name);
             allTeams.should.containEql(result.teams[1].name);
+        }
+    });
+
+    it('Chooses a range of 4.5 & 5 star teams when "4.5 -5" rating is chose', () => {
+    	 const teams = fourPointFiveStarTeams.concat(fiveStarTeams);
+        for (var i = 0; i < 100; i++) {
+            const result = FifaMemories.new(['a', 'b'], '4.5-5');
+            teams.should.containEql(result.teams[0].name);
+            teams.should.containEql(result.teams[1].name);
         }
     });
 });
